@@ -1,0 +1,68 @@
+name: Android CI
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: set up JDK 11
+      uses: actions/setup-java@v3
+      with:
+        java-version: '11'
+        distribution: 'temurin'
+        cache: gradle
+                    - name: Run test on Autify for Web
+  # You may pin to the exact commit or the version.
+  # uses: autifyhq/actions-web-test-run@a467d583f96440d53852875da474f8d196784385
+  uses: autifyhq/actions-web-test-run@v2.7.2
+  with:
+    # Access token of Autify for Web.
+    access-token: 
+    # URL of a test scenario or test plan e.g. https://app.autify.com/projects/<ID>/(scenarios|test_plans)/<ID>
+    autify-test-url: 
+    # When true, the action waits until the test finishes.
+    wait: # optional, default is false
+    # Timeout seconds when waiting.
+    timeout: # optional
+    # Interval seconds to poll the test result when waiting.
+    interval: # optional
+    # URL replacements e.g. http://example.com=http://example.net,http://example.org=http://example.net
+    url-replacements: # optional
+    # Maximum retry count while waiting. The command can take up to `timeout * (max-retry-count + 1)`. Only effective with `wait`
+    max-retry-count: # optional
+    # Name of the test execution (not supported by test plan executions)
+    test-execution-name: # optional
+    # Browser for running the test scenario (not supported by test plan executions)
+    browser: # optional
+    # Device for running the test scenario (not supported by test plan executions)
+    device: # optional
+    # Device type for running the test scenario (not supported by test plan executions)
+    device-type: # optional
+    # OS for running the test scenario (not supported by test plan executions)
+    os: # optional
+    # OS version for running the test scenario (not supported by test plan executions)
+    os-version: # optional
+    # Name of the Autify Connect Access Point
+    autify-connect: # optional
+    # When true, start Autify Connect Client
+    autify-connect-client: # optional, default is false
+    # Extra command line arguments you want to pass to Autify Connect Client e.g. "--experimental-tunnel-proxy http://proxy".
+    autify-connect-client-extra-arguments: # optional
+    # A path to `autify` which will be used to invoke Autify CLI internally. Default is searching from PATH.
+    autify-path: # optional, default is autify
+    # Autify CLI installer URL
+    autify-cli-installer-url: # optional, default is https://autify-cli-assets.s3.amazonaws.com/autify-cli/channels/stable/install-cicd.bash
+          
+
+    - name: Grant execute permission for gradlew
+      run: chmod +x gradlew
+    - name: Build with Gradle
+      run: ./gradlew build
